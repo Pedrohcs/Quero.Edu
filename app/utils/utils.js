@@ -42,3 +42,7 @@ module.exports.isDocumentValid = function(document) {
 
     return true
 }
+
+module.exports.isDueDayValid = function(dueDay) {
+    return dueDay >= 1 || dueDay <= 31
+}

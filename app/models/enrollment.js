@@ -12,7 +12,7 @@ module.exports.createTable = async function() {
                                         amount INTEGER NOT NULL CHECK ( amount > 0 ),
                                         installments INTEGER NOT NULL CHECK ( installments > 1 ) ,
                                         due_day INTEGER NOT NULL CHECK ( due_day > 0 AND due_day < 32 ) ,
-                                        student INTEGER NOT NULL REFERENCES students(id)
+                                        student_id INTEGER NOT NULL REFERENCES students(id)
                                     )`)
         }
     } catch(error) {
