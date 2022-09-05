@@ -4,12 +4,12 @@ const studentRepository = require('../repositories/student')
 
 module.exports.createStudent = async function(newStudent) {
     try {
-    validateStudent(newStudent)
+        validateStudent(newStudent)
 
-    let { attributes, quantityAttributes, studentsValues } = formatedStudent(newStudent)
-    await studentRepository.create(attributes, quantityAttributes, studentsValues)
-    let student = await studentRepository.getByCpf(newStudent.cpf)
-    return student.id
+        let { attributes, quantityAttributes, studentValues } = formatedStudent(newStudent)
+        let student = await studentRepository.create(attributes, quantityAttributes, studentValues)
+
+        return student.id
     } catch(error) {
         console.error(`[createStudent] Error creating Student ${newStudent.cpf}. ${error.message}`)
         throw error
@@ -44,7 +44,7 @@ function formatedStudent(newStudent) {
     try {
         let attributes = ''
         let quantityAttributes = ''
-        let studentsValues = []
+        let studentValues = []
         let index = 1
 
         if (newStudent.paymentMethod) {
@@ -58,7 +58,7 @@ function formatedStudent(newStudent) {
             else
                 attributes += `, ${key}`
 
-            studentsValues.push(newStudent[key])
+            studentValues.push(newStudent[key])
 
             if (!quantityAttributes)
                 quantityAttributes += `\$${index}`
@@ -70,7 +70,7 @@ function formatedStudent(newStudent) {
         return {
             attributes: attributes,
             quantityAttributes: quantityAttributes,
-            studentsValues: studentsValues
+            studentValues: studentValues
         }
     } catch(error) {
         throw error
@@ -79,9 +79,14 @@ function formatedStudent(newStudent) {
 
 module.exports.getStudents = async function(page = 1, count = 5) {
     try {
+        sugar.extend()
         let offset = page == 1 ? 0 : (page * count) - count
 
         let students = await studentRepository.getBypage(count, offset)
+
+        for (let student of students) {
+            student.birthdate = sugar.Date.create(student.birthdate).format("{dd}/{MM}/{yyyy}")
+        }
 
         return {
             'page': page,

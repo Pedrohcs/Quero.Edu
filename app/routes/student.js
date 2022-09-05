@@ -22,8 +22,8 @@ async function getStudents(req, res) {
     try {
         let page = req.query && req.query.page ? req.query.page : 1
         let count = req.query && req.query.count ? req.query.count : 5
-        let response = await studentController.getStudents(page, count)
-        res.status(201).send(response)
+        let students = await studentController.getStudents(page, count)
+        res.status(201).send(students)
     } catch(error) {
         res.status(error.code  || 500).send(error.message)
     }
