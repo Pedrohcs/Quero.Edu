@@ -1,0 +1,30 @@
+{
+  "name": "quero.edu",
+  "version": "1.0.0",
+  "description": "Repositório destinado ao teste técnico da Quero.Educação",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "http": "^0.0.1-security",
+    "pg": "^8.7.3",
+    "sugar": "^2.0.6"
+  },
+  "devDependencies": {
+    "debug": "^4.3.4",
+    "nodemon": "^2.0.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pedrohcs/Quero.Edu.git"
+  },
+  "author": "Pedroh.Coimbras",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Pedrohcs/Quero.Edu/issues"
+  },
+  "homepage": "https://github.com/Pedrohcs/Quero.Edu#readme"
+}
