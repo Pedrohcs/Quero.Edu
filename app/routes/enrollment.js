@@ -1,9 +1,10 @@
 const express = require('express')
+const middleware = require('../utils/middlewares')
 const enrollmentController = require('../controllers/enrollment')
 
 const router = express.Router()
 
-router.post('/', createEnrollment)
+router.post('/', middleware.authenticateHeader, createEnrollment)
 
 router.get('/', getEnrollments)
 
