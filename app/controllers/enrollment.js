@@ -2,6 +2,7 @@ const utils = require('../utils/utils')
 const studentRepository = require('../repositories/student')
 const enrollmentRepository = require('../repositories/enrollment')
 const billController = require('./bill')
+const sugar = require("sugar");
 
 module.exports.createEnrollment = async function(newEnrollment) {
     try {
@@ -83,6 +84,40 @@ function formatedEnrollment(newEnrollment) {
             enrollmentValues: enrollmentValues
         }
     } catch(error) {
+        throw error
+    }
+}
+
+module.exports.getEnrollments = async function(page = 1, count = 5) {
+    try {
+        sugar.extend()
+        let offset = page == 1 ? 0 : (page * count) - count
+
+        let enrollments = await enrollmentRepository.getAllEnrollments(count, offset)
+
+        for (let enrollment of enrollments) {
+            enrollment.bills = []
+            enrollment['bills_id'].forEach((billId, index) => {
+                enrollment.bills.push({
+                    'id': billId,
+                    'due_date': enrollment['bills_due_date'][index],
+                    'status': enrollment['bills_status'][index],
+                    'amount': enrollment['bills_amount'][index],
+                })
+            })
+
+            delete enrollment['bills_id']
+            delete enrollment['bills_due_date']
+            delete enrollment['bills_status']
+            delete enrollment['bills_amount']
+        }
+
+        return {
+            'page': page,
+            'items': enrollments
+        }
+    } catch(error) {
+        console.error(`[getEnrollments] Error fetching enrollments from page ${page} and with count ${count}. ${error.message}`)
         throw error
     }
 }
